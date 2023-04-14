@@ -92,7 +92,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Homepage()),
+                            MaterialPageRoute(builder: (context) => HomePage()),
                           );
                         },
                         child: Text('完了'),
