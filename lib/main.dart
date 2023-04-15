@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yamagata_map/view_models/tutorial_screen.dart';
+import 'package:yamagata_map/screens/tutorial_screen.dart';
 
 void main() {
   runApp(MyApp());

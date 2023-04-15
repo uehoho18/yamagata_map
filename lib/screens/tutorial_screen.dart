@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
-import 'package:yamagata_map/view_models/home_page.dart';
+import 'package:yamagata_map/screens/home_page.dart';
+import 'package:yamagata_map/screens/map_screen.dart';
 
 class TutorialScreen extends StatefulWidget {
   @override
@@ -100,7 +101,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomePage()),
+                                  builder: (context) => const MapScreen()),
                             );
                           },
                           child: Text('完了'),
