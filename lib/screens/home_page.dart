@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yamagata_map/view_models/home_page.dart';
+import 'package:yamagata_map/screens/home_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:yamagata_map/view_models/tutorial_screen.dart';
+import 'package:yamagata_map/screens/tutorial_screen.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
