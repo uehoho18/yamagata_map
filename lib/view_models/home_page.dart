@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:yamagata_map/view_models/home_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:yamagata_map/view_models/tutorial_screen.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -10,12 +12,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      title: 'Yamagata Map',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: TutorialScreen(),
     );
   }
 }
 
-final currentIndexProvider = StateProvider((ref) => 0);
+// 型を明示的に指定
+final currentIndexProvider = StateProvider<int>((ref) => 0);
 
 class HomePage extends ConsumerWidget {
   @override
