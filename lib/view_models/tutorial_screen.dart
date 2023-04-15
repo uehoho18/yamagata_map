@@ -21,87 +21,96 @@ class _TutorialScreenState extends State<TutorialScreen> {
   ];
 
   int currentIndex = 0;
+  final SwiperController swiperController =
+      SwiperController(); // SwiperControllerを追加
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: [
-        Swiper(
-          itemBuilder: (BuildContext context, int index) {
-            return Column(
-              children: [
-                Expanded(
-                  child: Image.asset(tutorialImages[index], fit: BoxFit.cover),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    tutorialTexts[index],
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            );
-          },
-          itemCount: tutorialImages.length,
-          onIndexChanged: (index) {
-            setState(() {
-              currentIndex = index;
-            });
-          },
-        ),
-        Positioned(
-          top: MediaQuery.of(context).padding.top + 16,
-          right: 16,
-          child: TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('スキップ'),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                currentIndex != 0
-                    ? TextButton(
-                        onPressed: () {
-                          setState(() {
-                            currentIndex -= 1;
-                          });
-                        },
-                        child: Text('戻る'),
-                      )
-                    : SizedBox.shrink(),
-                currentIndex != tutorialImages.length - 1
-                    ? TextButton(
-                        onPressed: () {
-                          setState(() {
-                            currentIndex += 1;
-                          });
-                        },
-                        child: Text('次へ'),
-                      )
-                    : TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        },
-                        child: Text('完了'),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 30.0),
+            child: Swiper(
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(26.0),
+                      child: Image.asset(
+                        tutorialImages[index],
+                        fit: BoxFit.contain,
                       ),
-              ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        tutorialTexts[index],
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                );
+              },
+              itemCount: tutorialImages.length,
+              onIndexChanged: (index) {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
+              controller: swiperController, // SwiperControllerをセット
             ),
           ),
-        ),
-      ],
-    ));
+          // Positioned(
+          //   top: MediaQuery.of(context).padding.top + 16,
+          //   right: 16,
+          //   child: TextButton(
+          //     onPressed: () {
+          //       Navigator.of(context).pop();
+          //     },
+          //     child: Text('スキップ'),
+          //   ),
+          // ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  currentIndex != 0
+                      ? TextButton(
+                          onPressed: () {
+                            swiperController.previous(); // 前のページへ
+                          },
+                          child: Text('戻る'),
+                        )
+                      : SizedBox.shrink(),
+                  currentIndex != tutorialImages.length - 1
+                      ? TextButton(
+                          onPressed: () {
+                            swiperController.next(); // 次のページへ
+                          },
+                          child: Text('次へ'),
+                        )
+                      : TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()),
+                            );
+                          },
+                          child: Text('完了'),
+                        ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
