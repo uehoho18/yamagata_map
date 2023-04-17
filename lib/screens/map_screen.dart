@@ -8,25 +8,15 @@ class MapScreen extends StatefulWidget {
   });
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
   late GoogleMapController mapController;
-  @override
-  void initState() {
-    //位置情報が許可されていない時に許可をリクエストする
-    Future(() async {
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        await Geolocator.requestPermission();
-      }
-    });
-    super.initState();
-  }
+  Set<Marker> markers = {};
 
-  final CameraPosition initialCameraPosition = const CameraPosition(
-    target: LatLng(35.681236, 139.767125), // 東京駅
+  final CameraPosition initialCameraPosition = CameraPosition(
+    target: LatLng(35.681236, 139.767125),
     zoom: 16.0,
   );
 
@@ -39,36 +29,57 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Map Screen'),
-      ),
       body: GoogleMap(
         initialCameraPosition: initialCameraPosition,
-        onMapCreated: (GoogleMapController controller) {
+        onMapCreated: (GoogleMapController controller) async {
           mapController = controller;
+          await _requestPermission();
+          await _moveToCurrentLocation();
         },
-        myLocationEnabled: true,
         myLocationButtonEnabled: false,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // 現在地を取得
-          final Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high,
-          );
-          // 現在地を中心にカメラを移動
-          mapController.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                target: LatLng(position.latitude, position.longitude),
-                zoom: 16.0,
-              ),
-            ),
-          );
-        },
-        tooltip: 'current position',
-        child: const Icon(Icons.add),
+        markers: markers,
       ),
     );
+  }
+
+  Future<void> _requestPermission() async {
+    // 位置情報の許可を求める
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      await Geolocator.requestPermission();
+    }
+  }
+
+  Future<void> _moveToCurrentLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      // 現在地を取得
+      final Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        markers.add(
+          Marker(
+            markerId: const MarkerId("current_location"),
+            position: LatLng(
+              position.latitude,
+              position.longitude,
+            ),
+          ),
+        );
+      });
+
+      // 現在地にカメラを移動
+      await mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(position.latitude, position.longitude),
+            zoom: 16.0,
+          ),
+        ),
+      );
+    }
   }
 }
