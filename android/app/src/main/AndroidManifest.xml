@@ -4,8 +4,7 @@
         android:label="yamagata_map"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <meta-data android:name="com.google.android.geo.API_KEY"　
-            android:value="AIzaSyDs8r9snB7DX6nHAyxcQoLk8F2PtarCwwE"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="${googleMapApiKey}">
         <activity
             android:name=".MainActivity"
             android:exported="true"
