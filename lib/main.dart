@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:yamagata_map/firebase_options.dart';
 import 'package:yamagata_map/screens/tutorial_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
