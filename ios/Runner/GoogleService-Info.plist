@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>983891016575-3l0643rja6gaq34pdh041u0rqlha3gfa.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.983891016575-3l0643rja6gaq34pdh041u0rqlha3gfa</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBfwoS52zuXOoLyCY_22TRBj8VOeatWHc4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>983891016575</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.yamagataMap</string>
+	<key>PROJECT_ID</key>
+	<string>book-list-sample-4fc45</string>
+	<key>STORAGE_BUCKET</key>
+	<string>book-list-sample-4fc45.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:983891016575:ios:45183a8bd3d86aa7a7384a</string>
+</dict>
+</plist>
