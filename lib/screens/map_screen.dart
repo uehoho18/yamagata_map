@@ -54,6 +54,11 @@ class _MapScreenState extends State<MapScreen> {
         myLocationButtonEnabled: false,
         markers: markers,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        label: const Text('SIGN IN'),
+      ),
     );
   }
 
