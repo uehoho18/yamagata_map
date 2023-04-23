@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yamagata_map/components/auth_modal/components/auth_text_form_field.dart';
+import 'package:yamagata_map/components/auth_modal/components/submit_button.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({
