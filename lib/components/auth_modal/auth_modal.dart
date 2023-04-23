@@ -8,7 +8,13 @@ class AuthModal extends StatefulWidget {
   State<AuthModal> createState() => _AuthModalState();
 }
 
+enum AuthModalType {
+  signIn,
+  signUp;
+}
+
 class _AuthModalState extends State<AuthModal> {
+  AuthModalType modalType = AuthModalType.signIn;
   @override
   Widget build(BuildContext context) {
     return Container(
