@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yamagata_map/components/auth_modal/components/close_modal_button.dart';
+import 'package:yamagata_map/components/auth_modal/components/sign_in_form.dart';
+import 'package:yamagata_map/components/auth_modal/components/sign_up_form.dart';
 
 enum AuthModalType {
   signIn,
