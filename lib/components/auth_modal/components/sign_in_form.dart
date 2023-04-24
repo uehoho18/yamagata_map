@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yamagata_map/components/auth_modal/components/auth_text_form_field.dart';
 import 'package:yamagata_map/components/auth_modal/components/submit_button.dart';
@@ -27,8 +28,7 @@ class _SignInFormState extends State<SignInForm> {
     super.dispose();
   }
 
-  // ---------  Validation ---------
-
+  // バリデーションのコード
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter some text';
@@ -39,6 +39,20 @@ class _SignInFormState extends State<SignInForm> {
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter some text';
+    }
+    return null;
+  }
+
+  // サインイン
+  Future<UserCredential?> signIn({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      return await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseException {
+      //エラーハンドリング
     }
     return null;
   }
@@ -80,6 +94,20 @@ class _SignInFormState extends State<SignInForm> {
   }
 
   Future<void> _submit(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {}
+    if (_formKey.currentState!.validate()) {
+      //サインインの処理
+      final UserCredential? user = await signIn(
+          email: _emailController.text, password: _passwordController.text);
+
+      // 画面が破棄されている場合、後続処理を行わない
+      if (!mounted) return;
+
+      if (user != null) {
+        Future.delayed(
+          const Duration(microseconds: 500),
+          Navigator.of(context).pop,
+        );
+      }
+    }
   }
 }
