@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yamagata_map/components/auth_modal/components/auth_text_form_field.dart';
 import 'package:yamagata_map/components/auth_modal/components/submit_button.dart';
@@ -50,6 +51,20 @@ class _SignUpFormState extends State<SignUpForm> {
     return null;
   }
 
+  // サインアップ
+  Future<UserCredential?> signUp({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      return await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException {
+      // エラーハンドリング
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -94,6 +109,18 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future<void> _submit(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {}
+    if (_formKey.currentState!.validate()) {
+      //サインアップの処理
+      final UserCredential? user = await signUp(
+          email: _emailController.text, password: _passwordController.text);
+
+      //画面が破棄されている場合、後続処理を行わない
+      if (!mounted) return;
+
+      //モーダル表示
+      if (user != null) {
+        Navigator.of(context).pop();
+      }
+    }
   }
 }
