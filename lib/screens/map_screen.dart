@@ -60,10 +60,11 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          showBottomSheet(
+          showModalBottomSheet(
               context: context,
+              isScrollControlled: true,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(16.0),
               ),
               builder: (BuildContext context) {
                 return const AuthModal();
@@ -85,6 +86,7 @@ class _MapScreenState extends State<MapScreen> {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.always ||
         permission == LocationPermission.whileInUse) {
+      // 現在地を取得
       final Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
@@ -99,6 +101,7 @@ class _MapScreenState extends State<MapScreen> {
         ));
       });
 
+      // 現在地にカメラを移動
       await mapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
@@ -133,7 +136,7 @@ class _MapScreenState extends State<MapScreen> {
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: LatLng(position.latitude, position.longitude),
-            zoom: 16,
+            zoom: 16.0,
           ),
         ),
       );

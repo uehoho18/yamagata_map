@@ -31,8 +31,8 @@ class _AuthModalState extends State<AuthModal> {
             children: [
               const CloseModalButton(),
               modalType == AuthModalType.signIn
-                  ? const Text('Sign In')
-                  : const Text('Sign Up'),
+                  ? const SignInForm()
+                  : const SignUpForm(),
               TextButton(
                 onPressed: switchModalType,
                 child: Text(buttonLabel),
@@ -45,6 +45,13 @@ class _AuthModalState extends State<AuthModal> {
     );
   }
 
+  void unFocus(BuildContext context) {
+    final FocusScopeNode currentScope = FocusScope.of(context);
+    if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+      FocusManager.instance.primaryFocus!.unfocus();
+    }
+  }
+
   void switchModalType() {
     setState(() {
       modalType = modalType == AuthModalType.signIn
@@ -53,12 +60,5 @@ class _AuthModalState extends State<AuthModal> {
 
       buttonLabel = modalType == AuthModalType.signIn ? '新規登録へ' : 'サインインへ';
     });
-  }
-
-  void unFocus(BuildContext context) {
-    final FocusScopeNode currentScope = FocusScope.of(context);
-    if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
-      FocusManager.instance.primaryFocus!.unfocus();
-    }
   }
 }
