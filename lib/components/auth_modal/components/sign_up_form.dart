@@ -16,6 +16,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  String errorMessage = '';
 
   @override
   void dispose() {
@@ -44,25 +45,23 @@ class _SignUpFormState extends State<SignUpForm> {
     if (value == null || value.isEmpty) {
       return 'Please enter some text';
     }
-    // パスワードテキストフィールドの内容と照合
     if (value != _passwordController.text) {
       return 'Password does not match';
     }
     return null;
   }
 
-  // サインアップ
-  Future<UserCredential?> signUp({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      return await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException {
-      // エラーハンドリング
-    }
-    return null;
+  // ---------  StateChanges ---------
+  void _setErrorMessage(String message) {
+    setState(() {
+      errorMessage = message;
+    });
+  }
+
+  void _clearErrorMessage() {
+    setState(() {
+      errorMessage = '';
+    });
   }
 
   @override
@@ -70,18 +69,20 @@ class _SignUpFormState extends State<SignUpForm> {
     return Form(
       key: _formKey,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
-            'Sign Up', // 変更
+            'Sign Up',
             style: TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 16.0),
+          AnimatedErrorMessage(errorMessage: errorMessage),
+          const SizedBox(height: 16.0),
           AuthTextFormField(
             controller: _emailController,
+            onChanged: (value) => _clearErrorMessage(),
             validator: validateEmail,
             labelText: 'Email',
           ),
@@ -89,18 +90,20 @@ class _SignUpFormState extends State<SignUpForm> {
           AuthTextFormField(
             controller: _passwordController,
             obscureText: true,
+            onChanged: (value) => _clearErrorMessage(),
             validator: validatePassword,
             labelText: 'Password',
           ),
           const SizedBox(height: 16.0),
           AuthTextFormField(
             obscureText: true,
+            onChanged: (value) => _clearErrorMessage(),
             validator: validateConfirmPassword,
             labelText: 'Confirm Password',
           ),
           const SizedBox(height: 16.0),
           SubmitButton(
-            labelName: '新規登録', // 変更
+            labelName: '新規登録',
             onTap: () => _submit(context),
           ),
         ],
@@ -110,17 +113,42 @@ class _SignUpFormState extends State<SignUpForm> {
 
   Future<void> _submit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      //サインアップの処理
+      // サインアップ処理
       final UserCredential? user = await signUp(
-          email: _emailController.text, password: _passwordController.text);
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 
-      //画面が破棄されている場合、後続処理を行わない
+      // 画面が破棄されている場合、後続処理を行わない
       if (!mounted) return;
 
-      //モーダル表示
+      // 500ミリ秒待って、モーダルを閉じる
       if (user != null) {
         Navigator.of(context).pop();
       }
     }
+  }
+
+  // ---------  Sign Up ---------
+
+  Future<UserCredential?> signUp({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      return await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        _setErrorMessage('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        _setErrorMessage('The account already exists for that email.');
+      } else {
+        _setErrorMessage('Unidentified error occurred while signing up.');
+      }
+    }
+    return null;
   }
 }
