@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:yamagata_map/components/auth_modal/components/animated_error_message.dart';
 import 'package:yamagata_map/components/auth_modal/components/auth_text_form_field.dart';
 import 'package:yamagata_map/components/auth_modal/components/submit_button.dart';
 
