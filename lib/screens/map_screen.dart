@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:yamagata_map/components/auth_modal/auth_modal.dart';
+import 'package:yamagata_map/screens/map_screen/components/sign_in_button.dart';
+import 'package:yamagata_map/screens/map_screen/components/sign_out_button.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -22,6 +25,33 @@ class _MapScreenState extends State<MapScreen> {
   // 現在地を監視するためのStream
   late StreamSubscription<Position> positionStream;
   Set<Marker> markers = {};
+  bool isSignedIn = false;
+
+  void setIsSignedIn(bool value) {
+    setState(() {
+      isSignedIn = value;
+    });
+  }
+
+  late StreamSubscription<User?> authUserStream;
+
+  @override
+  void initState() {
+    // ログイン状態の変化を監視
+    _watchSignInState();
+    super.initState();
+  }
+
+  void _watchSignInState() {
+    authUserStream =
+        FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        setIsSignedIn(false);
+      } else {
+        setIsSignedIn(true);
+      }
+    });
+  }
 
   final CameraPosition initialCameraPosition = const CameraPosition(
     target: LatLng(35.681236, 139.767125),
@@ -39,6 +69,8 @@ class _MapScreenState extends State<MapScreen> {
     mapController.dispose();
     // Streamを閉じる
     positionStream.cancel();
+    //ログイン状態の監視を開放
+    authUserStream.cancel();
     super.dispose();
   }
 
@@ -58,21 +90,17 @@ class _MapScreenState extends State<MapScreen> {
         markers: markers,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              builder: (BuildContext context) {
-                return const AuthModal();
-              });
-        },
-        label: const Text('SIGN IN'),
-      ),
+      floatingActionButton: !isSignedIn
+          ? const SignInButton()
+          : SignOutButton(
+              onPressed: () => _signOut(),
+            ),
     );
+  }
+
+  Future<void> _signOut() async {
+    await Future.delayed(const Duration(seconds: 1), () {});
+    await FirebaseAuth.instance.signOut();
   }
 
   Future<void> _requestPermission() async {
