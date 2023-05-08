@@ -1,14 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:yamagata_map/components/auth_modal/app_loading.dart';
 
 class SubmitButton extends StatelessWidget {
   const SubmitButton({
     super.key,
     required this.labelName,
     required this.onTap,
+    this.isLoading = false,
   });
 
   final String labelName;
   final VoidCallback onTap;
+  final bool Loadhing;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,7 @@ class SubmitButton extends StatelessWidget {
       height: 40,
       child: ElevatedButton(
         onPressed: onTap,
-        child: Text(labelName),
+        child: isLoading ? const AppLoading() : Text(labelName),
       ),
     );
   }

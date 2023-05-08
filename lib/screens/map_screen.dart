@@ -26,10 +26,17 @@ class _MapScreenState extends State<MapScreen> {
   late StreamSubscription<Position> positionStream;
   Set<Marker> markers = {};
   bool isSignedIn = false;
+  bool isLoading = false;
 
   void setIsSignedIn(bool value) {
     setState(() {
       isSignedIn = value;
+    });
+  }
+
+  void _setIsLoading(bool value) {
+    setState(() {
+      isLoading = value;
     });
   }
 
@@ -93,14 +100,17 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: !isSignedIn
           ? const SignInButton()
           : SignOutButton(
+              isLoading: isLoading,
               onPressed: () => _signOut(),
             ),
     );
   }
 
   Future<void> _signOut() async {
+    _setIsLoading(true);
     await Future.delayed(const Duration(seconds: 1), () {});
     await FirebaseAuth.instance.signOut();
+    _setIsLoading(false);
   }
 
   Future<void> _requestPermission() async {
