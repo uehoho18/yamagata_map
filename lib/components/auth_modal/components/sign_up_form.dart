@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yamagata_map/components/auth_modal/components/animated_error_message.dart';
+import 'package:yamagata_map/components/auth_modal/components/auth_modal_image.dart';
 import 'package:yamagata_map/components/auth_modal/components/auth_text_form_field.dart';
 import 'package:yamagata_map/components/auth_modal/components/submit_button.dart';
 
@@ -86,6 +87,7 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
           ),
           const SizedBox(height: 16.0),
+          const AuthModalImage(),
           AnimatedErrorMessage(errorMessage: errorMessage),
           const SizedBox(height: 16.0),
           AuthTextFormField(
@@ -145,6 +147,7 @@ class _SignUpFormState extends State<SignUpForm> {
     required String password,
   }) async {
     try {
+      _setIsLoading(true);
       return await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -157,6 +160,8 @@ class _SignUpFormState extends State<SignUpForm> {
       } else {
         _setErrorMessage('Unidentified error occurred while signing up.');
       }
+    } finally {
+      _setIsLoading(false);
     }
     return null;
   }
