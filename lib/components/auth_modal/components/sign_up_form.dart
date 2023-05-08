@@ -18,6 +18,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String errorMessage = '';
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -65,6 +66,12 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
+  void _setIsLoading(bool value) {
+    setState(() {
+      isLoading = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -105,6 +112,7 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 16.0),
           SubmitButton(
             labelName: '新規登録',
+            isLoading: isLoading,
             onTap: () => _submit(context),
           ),
         ],
