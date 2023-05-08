@@ -12,7 +12,7 @@ class SubmitButton extends StatelessWidget {
 
   final String labelName;
   final VoidCallback onTap;
-  final bool Loadhing;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
