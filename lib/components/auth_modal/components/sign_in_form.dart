@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yamagata_map/components/auth_modal/components/animated_error_message.dart';
