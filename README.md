@@ -17,7 +17,3 @@ samples, guidance on mobile development, and a full API reference.
 - Widget テスト、Unit テストを対象とする
 - Integration テストは当面対象外
 - 基本的な動作はレビューで担保可能であること、メンテナンスコストが高いため
-
-
-
-
